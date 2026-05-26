@@ -286,6 +286,27 @@ async function carregarPost() {
   } catch(e) { showToast('Falha ao carregar'); }
 }
 
+// ── Carregar / salvar Sobre ──────────────────────────────────────────────
+var editandoSobre = false;
+
+async function carregarSobre() {
+  showToast('Carregando sobre...', 0);
+  try {
+    var r = await fetch('api.php?action=load_sobre', {
+      headers: { 'X-CSRF-Token': CSRF_TOKEN }
+    });
+    var j = await r.json();
+    if (!j.ok) { showToast('Erro ao carregar'); return; }
+    document.getElementById('titulo').value = 'Sobre';
+    document.getElementById('tag').value    = '';
+    inp.value     = j.data.conteudo;
+    slugOriginal  = '';
+    editandoSobre = true;
+    aba('md');
+    showToast('Editando página Sobre');
+  } catch(e) { showToast('Falha ao carregar'); }
+}
+
 // ── Novo post ─────────────────────────────────
 function novoPost() {
   document.getElementById('post-select').value = '';
