@@ -397,6 +397,7 @@ body::before {
   gap: .4rem;
   font-size: var(--text-sm);
   color: var(--text-muted);
+  margin-top: 1.5rem;
   margin-bottom: 2rem;
   transition: color .2s;
 }

@@ -191,4 +191,21 @@ if ($action === 'upload') {
     json_ok(['url' => $url, 'tipo' => $tipo, 'md' => $md_snippet]);
 }
 
+// ── Carregar página Sobre ──────────────────────────────────────────────────
+if ($action === 'load_sobre') {
+    $f = __DIR__ . '/sobre.md';
+    $conteudo = file_exists($f) ? file_get_contents($f) : '';
+    json_ok(['conteudo' => $conteudo]);
+}
+
+// ── Salvar página Sobre ────────────────────────────────────────────────────
+if ($action === 'save_sobre') {
+    $conteudo = $_POST['conteudo'] ?? '';
+    file_put_contents(__DIR__ . '/sobre.md', $conteudo);
+    // Invalida cache do sobre
+    $f = CACHE_DIR . '/sobre.html';
+    if (file_exists($f)) unlink($f);
+    json_ok();
+}
+
 json_err('Ação desconhecida', 400);

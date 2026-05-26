@@ -143,6 +143,7 @@ $csrf_token = $_SESSION['csrf_token'];
       </select>
       <button class="btn" onclick="carregarPost()">carregar</button>
       <button class="btn" onclick="novoPost()">+ novo</button>
+      <button class="btn" title="Editar a página Sobre" onclick="carregarSobre()">sobre</button>
     </div>
 
     <!-- Titulo e tag -->
@@ -292,6 +293,7 @@ function novoPost() {
   document.getElementById('tag').value    = '';
   inp.value    = '';
   slugOriginal = '';
+  editandoSobre = false;
   aba('md');
 }
 
@@ -370,6 +372,24 @@ function inserirVideo() {
 
 // ── Publicar ──────────────────────────────────
 async function publicar() {
+  // Se está editando o Sobre, salva de forma diferente
+  if (editandoSobre) {
+    var fd = new FormData();
+    fd.append('conteudo', inp.value);
+    fd.append('csrf_token', CSRF_TOKEN);
+    showToast('Salvando...', 0);
+    try {
+      var r = await fetch('api.php?action=save_sobre', {
+        method: 'POST',
+        headers: { 'X-CSRF-Token': CSRF_TOKEN },
+        body: fd
+      });
+      var j = await r.json();
+      if (!j.ok) { showToast('Erro: ' + j.error); return; }
+      showToast('Página Sobre salva');
+    } catch(e) { showToast('Falha ao salvar'); }
+    return;
+  }
   var titulo = document.getElementById('titulo').value.trim();
   var tag    = document.getElementById('tag').value.trim();
   if (!titulo) { showToast('Adicione um titulo.'); return; }

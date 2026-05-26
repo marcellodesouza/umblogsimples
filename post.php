@@ -190,9 +190,13 @@ ob_start();
 
   <header class="site-header">
     <div class="inner">
-      <a href="index.php" class="site-title"><?= htmlspecialchars(BLOG_TITLE) ?></a>
+      <div>
+        <a href="index.php" class="site-title"><?= htmlspecialchars(BLOG_TITLE) ?></a>
+        <div class="site-subtitle"><?= htmlspecialchars(BLOG_SUBTITLE) ?></div>
+      </div>
       <div class="header-actions">
-        <a href="arquivo.php" class="btn" style="font-size:var(--text-xs)">arquivo</a>
+        <a href="sobre.php" class="post-tag">sobre</a>
+        <a href="arquivo.php" class="post-tag">arquivo</a>
         <button class="btn-theme" id="theme-toggle" title="Alternar modo escuro">🌙</button>
       </div>
     </div>

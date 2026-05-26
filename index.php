@@ -1,13 +1,10 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-// ── Cache ──────────────────────────────────────────────────────────────────
 $cache_file = CACHE_DIR . '/index.html';
-
-// Invalida cache se algum .md for mais recente
 $usar_cache = false;
 if (file_exists($cache_file)) {
-    $usar_cache = true;
+    $usar_cache  = true;
     $cache_mtime = filemtime($cache_file);
     foreach (glob(POSTS_DIR . '/*.md') as $f) {
         if (filemtime($f) > $cache_mtime) { $usar_cache = false; break; }
@@ -15,7 +12,6 @@ if (file_exists($cache_file)) {
 }
 if ($usar_cache) { echo file_get_contents($cache_file); exit; }
 
-// ── Processa ───────────────────────────────────────────────────────────────
 function listar_posts(): array {
     $posts = [];
     if (!is_dir(POSTS_DIR)) return $posts;
@@ -81,7 +77,8 @@ ob_start();
         <div class="site-subtitle"><?= htmlspecialchars(BLOG_SUBTITLE) ?></div>
       </div>
       <div class="header-actions">
-        <a href="arquivo.php" class="btn" style="font-size:var(--text-xs)">arquivo</a>
+        <a href="sobre.php" class="post-tag">sobre</a>
+        <a href="arquivo.php" class="post-tag">arquivo</a>
         <button class="btn-theme" id="theme-toggle" title="Alternar modo escuro" aria-label="Modo escuro">🌙</button>
       </div>
     </div>
