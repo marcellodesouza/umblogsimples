@@ -1,0 +1,13 @@
+# Permite acesso apenas a tipos de mídia conhecidos
+# Bloqueia qualquer tentativa de executar scripts na pasta
+
+Options -ExecCGI
+AddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .jsp .asp .sh .cgi
+
+<FilesMatch "\.(jpg|jpeg|png|gif|webp|mp3|ogg|wav|mp4|webm)$">
+    Allow from all
+</FilesMatch>
+
+<FilesMatch "^(?!.*\.(jpg|jpeg|png|gif|webp|mp3|ogg|wav|mp4|webm)$)">
+    Deny from all
+</FilesMatch>

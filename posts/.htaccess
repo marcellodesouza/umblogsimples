@@ -1,0 +1,4 @@
+# Bloqueia acesso direto aos arquivos .md
+# O PHP continua lendo normalmente pelo sistema de arquivos
+
+Deny from all

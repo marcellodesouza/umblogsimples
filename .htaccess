@@ -1,0 +1,9 @@
+# Bloqueia acesso direto a arquivos sensíveis
+<FilesMatch "^(config\.php|api\.php)$">
+    Deny from all
+</FilesMatch>
+
+# Bloqueia acesso a arquivos ocultos (.gitignore, etc)
+<FilesMatch "^\.">
+    Deny from all
+</FilesMatch>

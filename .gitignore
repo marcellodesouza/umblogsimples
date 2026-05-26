@@ -1,0 +1,6 @@
+# Configuração com senha — nunca suba para o GitHub
+config.php
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
