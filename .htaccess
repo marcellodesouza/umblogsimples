@@ -1,5 +1,5 @@
 # Bloqueia acesso direto a arquivos sensíveis
-<FilesMatch "^(config\.php|api\.php)$">
+<FilesMatch "^(config\.php)$">
     Deny from all
 </FilesMatch>
 
