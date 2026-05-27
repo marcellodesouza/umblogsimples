@@ -8,3 +8,15 @@
     Deny from all
 </FilesMatch>
 
+# ── URL limpa para posts ───────────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /blog/
+
+    # Ignora arquivos e pastas existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Redireciona /blog/SLUG para post.php?slug=SLUG
+    RewriteRule ^([a-zA-Z0-9_-]+)$ post.php?slug=$1 [L,QSA]
+</IfModule>

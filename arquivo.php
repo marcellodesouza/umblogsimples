@@ -185,7 +185,7 @@ ob_start();
           ?>
           <article class="post-item">
             <span class="post-day"><?= ltrim($dia, '0') ?></span>
-            <a href="post.php?slug=<?= urlencode($p['slug']) ?>" class="post-item-title">
+            <a href="/blog/<?= urlencode($p['slug']) ?>" class="post-item-title">
               <?= htmlspecialchars($p['titulo']) ?>
             </a>
             <?php if ($p['tag']): ?>
