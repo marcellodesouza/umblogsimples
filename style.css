@@ -26,7 +26,7 @@
   --font-display: 'Playfair Display', Georgia, serif;
   --font-mono:    'JetBrains Mono', monospace;
   --max-w:        860px;
-  --header-h:     6rem;
+  --header-h:     7.5rem;
 
   --text-xs:   0.8rem;
   --text-sm:   1.1rem;
@@ -254,14 +254,14 @@ body::before {
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: 600;
-  margin: 2.5rem 0 1rem;
+  margin: 1.5rem 0 .75rem;
   letter-spacing: -.01em;
 }
 .post-body h3 {
   font-family: var(--font-display);
   font-size: var(--text-md);
   font-weight: 600;
-  margin: 2rem 0 .75rem;
+  margin: 1.25rem 0 .75rem;
 }
 .post-body ul, .post-body ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
 .post-body li { margin-bottom: .35rem; }
@@ -577,6 +577,17 @@ body.focus-mode .editor-panes { height: calc(100vh - 40px); }
 @media (max-width: 640px) {
   .post-item { grid-template-columns: auto 1fr auto; gap: .5rem; }
   .editor-fields { grid-template-columns: 1fr; }
+
+  /* Header mobile */
+  .site-header .inner {
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding: 0 1rem;
+  }
+  .site-title { font-size: var(--text-md); }
+  .site-subtitle { font-size: var(--text-xs); }
+  .header-actions { gap: .4rem; }
+  .post-tag { font-size: .7rem; padding: .15rem .45rem; }
 }
 
 /* ── Animação de entrada ── */

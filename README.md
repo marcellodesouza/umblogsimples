@@ -169,6 +169,16 @@ def hello():
 
 Linguagens suportadas: `python`, `javascript`, `php`, `bash`, `html`, `css`, `json`, `sql` e [muitas outras](https://highlightjs.org/demo).
 
+### Arquivo por mês
+
+A página `arquivo.php` lista todos os meses com o número de posts de cada um. Clique em um mês para ver os posts daquele período.
+
+Na home, o nome do mês também é clicável e leva para a mesma página filtrada.
+
+### Editando a página Sobre
+
+No editor, clique no botão **sobre** ao lado do seletor de posts. O conteúdo do `sobre.md` é carregado no editor. Edite e clique em **Publicar** — o cache é invalidado automaticamente.
+
 ### Apagando um post
 
 1. Apague o arquivo `.md` da pasta `/posts/`
@@ -177,9 +187,19 @@ Linguagens suportadas: `python`, `javascript`, `php`, `bash`, `html`, `css`, `js
 
 ### Cache
 
-O cache é gerado automaticamente na primeira visita a cada página e invalidado automaticamente ao publicar ou editar um post. Você não precisa fazer nada manualmente.
+O cache é gerado automaticamente na primeira visita a cada página e salvo em `/cache/` como um arquivo `.html`. Nas visitas seguintes o arquivo é entregue direto, sem processar nada.
 
-Se quiser forçar a limpeza de todo o cache, basta apagar todos os arquivos `.html` dentro da pasta `/cache/`.
+**Invalidação automática** — ao publicar ou editar um post o cache é limpo automaticamente:
+- Cache do post editado
+- `cache/index.html` — home
+- `cache/arquivo*.html` — páginas de arquivo por mês
+
+**Limpeza manual** — se precisar forçar a regeneração de tudo, apague todos os arquivos `.html` dentro da pasta `/cache/`. Na próxima visita tudo é regenerado.
+
+**Quando limpar manualmente:**
+- Após atualizar o `style.css` ou qualquer arquivo PHP
+- Após alterar o `sobre.md` diretamente pelo FTP
+- Se alguma página parecer desatualizada
 
 ---
 
@@ -195,8 +215,10 @@ Se quiser forçar a limpeza de todo o cache, basta apagar todos os arquivos `.ht
 ├── index.php               ← listagem pública de posts
 ├── post.php                ← leitura de post individual
 ├── editor.php              ← editor web protegido por senha
-├── api.php                 ← salva posts e faz uploads de mídia
+├── api.php                 ← salva posts, uploads e edição do sobre
 ├── arquivo.php             ← listagem de posts por mês
+├── sobre.php               ← página sobre
+├── sobre.md                ← conteúdo da página sobre (editável pelo editor)
 ├── screenshots/            ← imagens para o README
 ├── posts/
 │   └── .htaccess           ← bloqueia acesso direto aos .md
@@ -266,7 +288,7 @@ define('BLOG_PASSWORD_HASH', '$2y$12$xK9mN3pQrS5tUvWxYzAbCdEfGhIjKlMnOpQrStUvWxY
 | Proteção | Como funciona |
 |---|---|
 | Acesso ao `config.php` | Bloqueado via `.htaccess` |
-| Acesso ao `api.php` | Bloqueado via `.htaccess` — só o editor chama internamente |
+| Acesso ao `api.php` | Protegido por sessão + CSRF — acesso sem autenticação retorna 401 |
 | Acesso direto aos `.md` | Bloqueado via `.htaccess` na pasta `/posts/` |
 | Execução de PHP em uploads | Bloqueado via `.htaccess` na pasta `/uploads/` |
 | Acesso ao cache | Bloqueado via `.htaccess` na pasta `/cache/` |
@@ -274,3 +296,85 @@ define('BLOG_PASSWORD_HASH', '$2y$12$xK9mN3pQrS5tUvWxYzAbCdEfGhIjKlMnOpQrStUvWxY
 | Ataques CSRF | Token validado em todas as requisições do editor |
 | Upload malicioso | Validação de extensão + magic bytes para imagens |
 | Upload em massa | Rate limit de 20 uploads por minuto por sessão |
+
+---
+
+## URLs limpas
+
+Os posts usam URLs limpas — sem `post.php?slug=` na barra de endereços:
+
+```
+seusite.com/blog/2026-05-26-titulo-do-post
+```
+
+Isso é feito via rewrite no `.htaccess` raiz. O PHP não muda nada — internamente o slug continua sendo usado para tudo.
+
+**Se o blog estiver em subpasta**, o `RewriteBase` no `.htaccess` precisa refletir o caminho:
+
+```apache
+RewriteBase /blog/
+```
+
+Se estiver na raiz do site:
+
+```apache
+RewriteBase /
+```
+
+---
+
+## Página Sobre
+
+O conteúdo da página Sobre fica no arquivo `sobre.md` na raiz do blog. Para editar:
+
+1. Acesse o editor (`editor.php`)
+2. Clique no botão **sobre** ao lado do seletor de posts
+3. Edite o conteúdo em Markdown
+4. Clique em **Publicar**
+
+O cache da página é invalidado automaticamente ao salvar.
+
+---
+
+## Analytics com Umami
+
+O blog não inclui nenhum script de analytics por padrão — você adiciona o seu próprio se quiser.
+
+Recomendamos o **[Umami](https://umami.is)** — open source, sem cookies, sem banner de consentimento, compatível com GDPR.
+
+**Como configurar:**
+
+1. Crie uma conta em [umami.is](https://umami.is)
+2. Adicione seu site e copie o snippet gerado
+3. Cole o snippet no `<head>` de cada página pública antes do `</head>`:
+
+```html
+<script defer src="https://cloud.umami.is/script.js" data-website-id="SEU-ID-AQUI"></script>
+```
+
+Páginas para adicionar: `index.php`, `post.php`, `arquivo.php`, `sobre.php`.
+O editor (`editor.php`) não precisa ser rastreado.
+
+> ⚠️ Não suba o snippet para o GitHub — ele contém o ID do seu site.
+
+---
+
+## Dicas de Markdown
+
+**Sempre deixe uma linha em branco** entre parágrafos, títulos, listas e blocos de código. Sem a linha em branco o parser trata tudo como um bloco só.
+
+✅ Correto:
+```
+Este é um parágrafo.
+
+## Título da seção
+
+Este é outro parágrafo.
+```
+
+❌ Incorreto:
+```
+Este é um parágrafo.
+## Título da seção
+Este é outro parágrafo.
+```
